@@ -125,24 +125,4 @@ FROM read_parquet('s3://YOUR_BUCKET_NAME/marts/flat_mart/job_postings.parquet')
 GROUP BY job_title_short
 ORDER BY postings DESC;
 ```
-
----
-
-## 💡 Engineering Practices
-
-- **Idempotent:** every script drops and recreates its objects, so the pipeline can be rerun safely.
-- **Validated:** each step prints row counts, and the load step checks for orphaned foreign keys.
-- **Additive fact design:** `skills_mart` stores counts, not ratios, so any rollup stays correct. Ratios are derived at query time.
-- **Incremental pattern:** `06_update_priority_mart.sql` uses `MERGE` with `WHEN MATCHED`, `WHEN NOT MATCHED` and `WHEN NOT MATCHED BY SOURCE`.
-- **Separation of concerns:** one schema per mart, with the master script orchestrating the order.
-- **Security:** private bucket, least-privilege IAM user, no hard-coded credentials.
-
----
-
-## ⚖️ Trade-offs & Next Steps
-
-- Surrogate keys in `company_mart` use a self-join ranking for portability. `ROW_NUMBER()` would scale better on larger data.
-- Orchestration is a single SQL script today. A natural next step is scheduling it with GitHub Actions, AWS Lambda/EventBridge or Airflow.
-- Adding data-quality tests (dbt or SQL assertions) and partitioning the Parquet exports by date would round out the production story.
-
 ---
