@@ -146,7 +146,3 @@ ORDER BY postings DESC;
 - Adding data-quality tests (dbt or SQL assertions) and partitioning the Parquet exports by date would round out the production story.
 
 ---
-
-## 👤 Author
-
-**Your Name** · [LinkedIn](https://linkedin.com/in/your-profile) · [GitHub](https://github.com/your-username)
